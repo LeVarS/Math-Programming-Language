@@ -44,8 +44,8 @@ VAR
     : [a-zA-Z]([a-zA-Z] | [0-9] | [_])*
     ;
 EQU_SIGN 
-        : '==' | '<=' | '>=' | '<' | '>'
-        ;
+    : '==' | '<=' | '>=' | '<' | '>'
+    ;
 STRING  
     : '"' ([a-zA-Z] | [0-9] | OPERATOR | OPERATOR | EQU_SIGN)* '"' //TODO: expand to include symbols
     ;
