@@ -7,28 +7,37 @@ source
     ;
 //begin parser rules
 statement
-    : 'display' expr '.'
+    : 'display' expr
     | LET VAR (',' VAR)* 'exist' //(',' VAR)* allows for multiple declartion in single line e.g. let a,b,c,d,e,f,g exist.
-    | LET VAR (',' VAR)* '=' expr '.'
-    | SET VAR (',' VAR)* '=' expr '.' //todo: how to override parser to check for an existing variable(s)
-    | 'solve for' VAR ',' 'given' equ '.'
-    | 'solve for' VAR ',' 'given' equ ',' 'when' equ '.'
+    | LET VAR (',' VAR)* '=' expr 
+    | SET VAR (',' VAR)* '=' expr //todo: how to override parser to check for an existing variable(s)
+    | 'solve for' VAR ',' 'given' equ 
+    | 'solve for' VAR ',' 'given' equ ',' 'when' equ
     ;
-//an expression can be a string, or a series of operations
+// */ an expression can be a string, or a series of operations
 expr    
     : STRING
     | operation
     ;
 operation //I think this covers PEMDAS - JO
+    //TODO: revisit later down the line
+    /* 
     : '(' operation ')'
-    | operation '(' operation ')'
-    | (TERM '**' operation) //exponenation 
+    | operation '(' operation ')' 
+    */
+    : (TERM '^' operation) //exponenation 
     | (TERM '*' operation | TERM '/' operation | TERM '%' operation) //% support for modulo
     | (TERM '+' operation | TERM '-' operation)
     ;
 equ
     : '\'' expr EQU_SIGN expr '\''
     | '\'' expr EQU_SIGN VAR EQU_SIGN expr '\'' //to catch equations 'like 1 <= x <= 2'
+    ;
+
+TERM
+    : VAR 
+    | INT 
+    | INT VAR
     ;
 
 /*
@@ -54,9 +63,4 @@ INT
     ;
 OPERATOR
     : '-' | '+' | '*' | '/' 
-    ;
-TERM
-    : VAR
-    | INT
-    | INT VAR
     ;
